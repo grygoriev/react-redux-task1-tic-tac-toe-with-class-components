@@ -1,23 +1,11 @@
 import { PLAYER_ACTION, PLAYER_NAME, STATUS } from '../../constants';
 import { InformationLayout } from './information-layout';
-import { store } from '../../store';
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectCurrentPlayer, selectStatus } from '../../selectors';
 
 export const Information = () => {
-	const [status, setStatus] = useState(store.getState().status);
-	const [currentPlayer, setCurrentPlayer] = useState(store.getState().currentPlayer);
-
-	useEffect(() => {
-		const unsubscribe = store.subscribe(() => {
-			const newStatus = store.getState().status;
-			const newCurrentPlayer = store.getState().currentPlayer;
-
-			if (newStatus !== status) setStatus(newStatus);
-			if (newCurrentPlayer !== currentPlayer) setCurrentPlayer(newCurrentPlayer);
-		});
-
-		return () => unsubscribe();
-	}, [status, currentPlayer]);
+	const status = useSelector(selectStatus);
+	const currentPlayer = useSelector(selectCurrentPlayer);
 
 	const playerAction = PLAYER_ACTION[status];
 	const playerName = PLAYER_NAME[currentPlayer];

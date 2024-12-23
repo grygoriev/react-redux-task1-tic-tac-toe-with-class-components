@@ -1,8 +1,9 @@
 import { checkWin, checkEmptyCell } from '../utils';
 import { STATUS, PLAYER } from '../constants';
 import { store } from '../store';
+import { setCurrentPlayer, setField, setStatus } from '../actions';
 
-export const handleCellClick = (cellIndex) => {
+export const handleCellClick = (cellIndex, dispatch) => {
 	const { status, currentPlayer, field } = store.getState();
 	if (
 		status === STATUS.WIN ||
@@ -16,16 +17,13 @@ export const handleCellClick = (cellIndex) => {
 
 	newField[cellIndex] = currentPlayer;
 
-	store.dispatch({ type: 'SET_FIELD', payload: newField });
+	dispatch(setField(newField));
 
 	if (checkWin(newField, currentPlayer)) {
-		store.dispatch({ type: 'SET_STATUS', payload: STATUS.WIN });
+		dispatch(setStatus(STATUS.WIN));
 	} else if (checkEmptyCell(newField)) {
-		store.dispatch({
-			type: 'SET_CURRENT_PLAYER',
-			payload: currentPlayer === PLAYER.CROSS ? PLAYER.NOUGHT : PLAYER.CROSS,
-		});
+		dispatch(setCurrentPlayer(currentPlayer));
 	} else {
-		store.dispatch({ type: 'SET_STATUS', payload: STATUS.DRAW });
+		dispatch(setStatus(STATUS.DRAW));
 	}
 };

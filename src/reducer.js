@@ -7,7 +7,7 @@ const initialState = {
 	field: createEmptyField(),
 };
 
-export const appReducer = (state = initialState, { type, payload }) => {
+export const reducer = (state = initialState, { type, payload }) => {
 	switch (type) {
 		case 'SET_CURRENT_PLAYER':
 			return {
