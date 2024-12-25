@@ -1,17 +1,25 @@
 import { PLAYER_ACTION, PLAYER_NAME, STATUS } from '../../constants';
 import { InformationLayout } from './information-layout';
-import { useSelector } from 'react-redux';
-import { selectCurrentPlayer, selectStatus } from '../../selectors';
+import { connect } from 'react-redux';
+import { Component } from 'react';
 
-export const Information = () => {
-	const status = useSelector(selectStatus);
-	const currentPlayer = useSelector(selectCurrentPlayer);
+export class InformationContainer extends Component {
+	render() {
+		const { status, currentPlayer } = this.props;
 
-	const playerAction = PLAYER_ACTION[status];
-	const playerName = PLAYER_NAME[currentPlayer];
+		const playerAction = PLAYER_ACTION[status];
+		const playerName = PLAYER_NAME[currentPlayer];
 
-	const information =
-		status === STATUS.DRAW ? 'Ничья' : `${playerAction}: ${playerName}`;
+		const information =
+			status === STATUS.DRAW ? 'Ничья' : `${playerAction}: ${playerName}`;
 
-	return <InformationLayout information={information} />;
-};
+		return <InformationLayout information={information} />;
+	}
+}
+
+const mapStateToProps = (state) => ({
+	status: state.status,
+	currentPlayer: state.currentPlayer,
+});
+
+export const Information = connect(mapStateToProps)(InformationContainer);
